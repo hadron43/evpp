@@ -18,6 +18,7 @@
 
 *.VC.VC.opendb
 
+.vscode
 vsprojects/Debug/
 vsprojects/Release/
 vsprojects/bin/

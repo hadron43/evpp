@@ -34,6 +34,7 @@ int main(int argc, char* argv[]) {
     }
 
     evpp::udp::Server server;
+    server.setBindAddr("0.0.0.0");
     server.SetThreadDispatchPolicy(evpp::ThreadDispatchPolicy::kIPAddressHashing);
     server.SetMessageHandler([](evpp::EventLoop* loop, evpp::udp::MessagePtr& msg) {
         std::stringstream oss;

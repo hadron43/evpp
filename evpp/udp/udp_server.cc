@@ -36,7 +36,7 @@ public:
 
     bool Listen(int p) {
         this->port_ = p;
-        this->fd_ = sock::CreateUDPServer(p);
+        this->fd_ = sock::CreateUDPServer(p, server_ -> bind_addr);
         if (this->fd_ < 0) {
             LOG_ERROR << "listen error";
             return false;
@@ -122,6 +122,9 @@ bool Server::Init(const std::vector<int>& ports) {
     return true;
 }
 
+void Server::setBindAddr(std::string addr) {
+    this -> bind_addr = addr;
+}
 
 bool Server::Init(const std::string& listen_ports/*like "53,5353,1053"*/) {
     std::vector<std::string> vec;
@@ -259,7 +262,7 @@ void Server::RecvingLoop(RecvThread* thread) {
 
 
 /*
-Benchmark data£ºIntel(R) Xeon(R) CPU E5-2630 0 @ 2.30GHz 24 core
+Benchmark dataï¿½ï¿½Intel(R) Xeon(R) CPU E5-2630 0 @ 2.30GHz 24 core
 
 The recvfrom thread is the bottleneck, other 23 working threads' load is very very low.
 
@@ -268,7 +271,7 @@ If we need to improve the performance, there two ways to achieve it:
 2. Using RAW SOCKET
 3. Using recvmmsg/sendmmsg which can achieve 40w QPS on single thread
 
-udp message length QPS£º
+udp message length QPSï¿½ï¿½
 0.1k    9w+
 1k      9w+
 

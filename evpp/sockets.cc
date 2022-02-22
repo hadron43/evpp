@@ -78,6 +78,10 @@ out:
 }
 
 evpp_socket_t CreateUDPServer(int port) {
+    return CreateUDPServer(port, "0.0.0.0");
+}
+
+evpp_socket_t CreateUDPServer(int port, std::string bind_addr) {
     evpp_socket_t fd = ::socket(AF_INET, SOCK_DGRAM, 0);
     if (fd == -1) {
         int serrno = errno;
@@ -87,7 +91,7 @@ evpp_socket_t CreateUDPServer(int port) {
     SetReuseAddr(fd);
     SetReusePort(fd);
 
-    std::string addr = std::string("0.0.0.0:") + std::to_string(port);
+    std::string addr = bind_addr + std::string(":") + std::to_string(port);
     struct sockaddr_storage local = ParseFromIPPort(addr.c_str());
     if (::bind(fd, (struct sockaddr*)&local, sizeof(struct sockaddr))) {
         int serrno = errno;
