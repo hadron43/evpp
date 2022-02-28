@@ -7,6 +7,9 @@
 #include "../../winmain-inl.h"
 #endif
 
+#define bind_addr "0.0.0.0"
+#define iface "lo"
+
 int main(int argc, char* argv[]) {
     std::vector<int> ports = { 1053, 5353 };
     int port = 29099;
@@ -34,7 +37,8 @@ int main(int argc, char* argv[]) {
     }
 
     evpp::udp::Server server;
-    server.setBindAddr("0.0.0.0");
+    server.setBindAddr(bind_addr);
+    server.setInterface(iface);
     server.SetThreadDispatchPolicy(evpp::ThreadDispatchPolicy::kIPAddressHashing);
     server.SetMessageHandler([](evpp::EventLoop* loop, evpp::udp::MessagePtr& msg) {
         std::stringstream oss;

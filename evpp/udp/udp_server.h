@@ -21,12 +21,11 @@ public:
     Server();
     ~Server();
 
-    std::string bind_addr;
-
     bool Init(int port);
     bool Init(const std::vector<int>& ports);
     bool Init(const std::string& listen_ports/*like "53,5353,1053"*/);
     void setBindAddr(std::string addr);
+    void setInterface(std::string interface);
     bool Start();
     void Stop(bool wait_thread_exit);
 
@@ -50,6 +49,10 @@ public:
     void set_recv_buf_size(size_t v) {
         recv_buf_size_ = v;
     }
+
+protected:
+    std::string bind_addr;
+    std::string interface;
 
 private:
     class RecvThread;

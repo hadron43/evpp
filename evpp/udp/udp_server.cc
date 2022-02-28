@@ -36,7 +36,7 @@ public:
 
     bool Listen(int p) {
         this->port_ = p;
-        this->fd_ = sock::CreateUDPServer(p, server_ -> bind_addr);
+        this->fd_ = sock::CreateUDPServer(p, server_ -> bind_addr, server_ -> interface);
         if (this->fd_ < 0) {
             LOG_ERROR << "listen error";
             return false;
@@ -124,6 +124,10 @@ bool Server::Init(const std::vector<int>& ports) {
 
 void Server::setBindAddr(std::string addr) {
     this -> bind_addr = addr;
+}
+
+void Server::setInterface(std::string iface) {
+    this -> interface = iface;
 }
 
 bool Server::Init(const std::string& listen_ports/*like "53,5353,1053"*/) {

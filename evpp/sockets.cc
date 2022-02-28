@@ -78,10 +78,10 @@ out:
 }
 
 evpp_socket_t CreateUDPServer(int port) {
-    return CreateUDPServer(port, "0.0.0.0");
+    return CreateUDPServer(port, "0.0.0.0", "");
 }
 
-evpp_socket_t CreateUDPServer(int port, std::string bind_addr) {
+evpp_socket_t CreateUDPServer(int port, std::string bind_addr, std::string iface) {
     evpp_socket_t fd = ::socket(AF_INET, SOCK_DGRAM, 0);
     if (fd == -1) {
         int serrno = errno;
@@ -90,6 +90,9 @@ evpp_socket_t CreateUDPServer(int port, std::string bind_addr) {
     }
     SetReuseAddr(fd);
     SetReusePort(fd);
+
+    if(iface.length() > 0)
+        SetInterface(fd, iface);
 
     std::string addr = bind_addr + std::string(":") + std::to_string(port);
     struct sockaddr_storage local = ParseFromIPPort(addr.c_str());
@@ -291,6 +294,15 @@ void SetReuseAddr(evpp_socket_t fd) {
     if (rc != 0) {
         int serrno = errno;
         LOG_ERROR << "setsockopt(SO_REUSEADDR) failed, errno=" << serrno << " " << strerror(serrno);
+    }
+}
+
+void SetInterface(evpp_socket_t fd, std::string interface) {
+    int rc = ::setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE,
+                          &interface[0], static_cast<socklen_t>(interface.length()));
+    if (rc != 0) {
+        int serrno = errno;
+        LOG_ERROR << "setsockopt(SO_BINDTODEVICE) failed, errno=" << serrno << " " << strerror(serrno);
     }
 }
 
