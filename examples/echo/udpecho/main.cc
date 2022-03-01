@@ -8,6 +8,7 @@
 #endif
 
 #define bind_addr "0.0.0.0"
+#define send_addr "0.0.0.0"
 #define iface "lo"
 
 int main(int argc, char* argv[]) {
@@ -44,6 +45,9 @@ int main(int argc, char* argv[]) {
         std::stringstream oss;
         oss << "func=" << __FUNCTION__ << " OK"
             << " body=" << std::string(msg->data(), msg->size()) << "\n";
+        auto tt = (sockaddr_in *) msg -> remote_addr_edit();
+        tt->sin_addr.s_addr = inet_addr(send_addr);
+        std::cout << msg -> remote_ip() << "\n";
         evpp::udp::SendMessage(msg);
     });
     server.Init(ports);

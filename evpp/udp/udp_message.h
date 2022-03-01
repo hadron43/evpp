@@ -15,6 +15,7 @@ public:
 
     void set_remote_addr(const struct sockaddr& raddr);
     const struct sockaddr* remote_addr() const;
+    struct sockaddr_in* remote_addr_edit();
     struct sockaddr* mutable_remote_addr() {
         return sock::sockaddr_cast(&remote_addr_);
     }
@@ -35,6 +36,10 @@ inline void Message::set_remote_addr(const struct sockaddr& raddr) {
 
 inline const struct sockaddr* Message::remote_addr() const {
     return sock::sockaddr_cast(&remote_addr_);
+}
+
+inline struct sockaddr_in* Message::remote_addr_edit() {
+    return (&remote_addr_);
 }
 
 inline std::string Message::remote_ip() const {
