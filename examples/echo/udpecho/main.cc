@@ -33,12 +33,12 @@ int main(int argc, char* argv[]) {
     if (argc == 2) {
         port = atoi(argv[1]);
     }
-    ports.push_back(port);
 
     if (argc == 3) {
         port = atoi(argv[1]);
         thread_num = atoi(argv[2]);
     }
+    ports.push_back(port);
 
     // Creating socket file descriptor
     if ( (f_sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) {
