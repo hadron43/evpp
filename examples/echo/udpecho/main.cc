@@ -60,7 +60,7 @@ int main(int argc, char* argv[]) {
         oss << "func=" << __FUNCTION__ << " OK"
             << " body=" << std::string(msg->data(), msg->size()) << "\n";
 
-        sendto(f_sockfd, msg -> data(), strlen(msg->data()) + 1,
+        sendto(f_sockfd, msg -> data(), msg->size(),
         MSG_CONFIRM, (const struct sockaddr *) &f_addr,
             sizeof(f_addr));
     });
